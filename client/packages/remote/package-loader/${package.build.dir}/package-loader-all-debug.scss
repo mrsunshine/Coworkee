@@ -1,0 +1,15 @@
+$image-search-path: '${package.build.dir}/resources' !default;
+$theme-name:  '${theme.name}' !default;
+$include-ext-package: dynamic(true);;
+$include-ext-package-entry: dynamic(true);;
+
+
+/* ======================== ETC ======================== */
+
+/* including package ext */
+$ext-resource-root: 'ext' !default;
+$ext-resource-path: 'ext/images' !default;
+$current-package: 'ext';
+$current-resource-root: $ext-resource-root;
+$relative-image-path-for-uis: $ext-resource-path;
+@import '../../../../ext/sass/etc/all';

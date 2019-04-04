@@ -62,7 +62,8 @@
      */
     "requires": [
         "font-awesome",
-        "google"
+        "google",
+        "package-loader"
     ],
 
     "mashup": {
