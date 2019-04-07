@@ -63,3 +63,9 @@ required to change the following configs:
 - change the Ext.Direct API endpoint in the client app ([`app.json#js`](client/app.json#L254)) by the absolute URL
 - change the server IP/hostname ([`direct.server` option](server/config.json#L16)) by an accessible endpoint
 - enable CORS ([`cors.enabled: true`](server/config.json#L3))
+
+
+### Dynamic Package Loading
+
+https://github.com/sencha/package-loader
+https://mitchellsimoens.com/2017/04/12/package-loading/

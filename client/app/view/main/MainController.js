@@ -53,7 +53,7 @@ Ext.define('App.view.main.MainController', {
         var container = this.getContainerForViewId(id),
             item = container.child('component[viewId=' + id + ']'),
             reset = !!item;
-
+console.log('ensure view', id, config, route);
         if (!item) {
             item = container.add(Ext.apply({ viewId: id }, config));
         }
@@ -82,7 +82,8 @@ Ext.define('App.view.main.MainController', {
         this.activate(
             this.ensureView(type, {
                 xtype: entry.get('xtype'),
-                title: entry.get('text')
+                title: entry.get('text'),
+                packageName: entry.get('packageName')
             }, args));
     },
 

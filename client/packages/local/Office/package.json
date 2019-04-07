@@ -17,7 +17,7 @@
           * As a general rule, all classes that belong to this package should be under this namespace
           * if multiple namespaces are part of this package, set this to "".
           */
-         "namespace": "Office",
+         "namespace": "App.view.office",
 
         /**
          * The package type.
@@ -123,7 +123,7 @@
              * then to style "Office.panel.Panel" you would put SASS in
              * ./sass/src/Office/panel/Panel.scss.
              */
-            "namespace": "Office",
+            "namespace": "App.view.office",
 
             /**
              * Comma-separated list of files or folders containing extra Sass. These
@@ -264,6 +264,8 @@
          *          }
          *      }
          */
-        "requires": []
+        "requires": [
+            "coworkee-widgets"
+        ]
     }
 }

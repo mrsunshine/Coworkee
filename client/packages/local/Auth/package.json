@@ -17,7 +17,7 @@
           * As a general rule, all classes that belong to this package should be under this namespace
           * if multiple namespaces are part of this package, set this to "".
           */
-         "namespace": "Auth",
+         "namespace": "App.view.auth",
 
         /**
          * The package type.
@@ -123,7 +123,7 @@
              * then to style "Auth.panel.Panel" you would put SASS in
              * ./sass/src/Auth/panel/Panel.scss.
              */
-            "namespace": "Auth",
+            "namespace": "App.view.auth",
 
             /**
              * Comma-separated list of files or folders containing extra Sass. These

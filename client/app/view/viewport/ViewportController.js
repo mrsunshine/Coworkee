@@ -23,6 +23,7 @@ Ext.define('App.view.viewport.ViewportController', {
     },
 
     showView: function(xtype) {
+        console.log("showView", xtype);
         var view = this.lookup(xtype),
             viewport = this.getView();
 

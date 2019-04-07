@@ -2,7 +2,7 @@
     /**
      * The name of the package.
      */
-    "name": "Home",
+    "name": "coworkee-widgets",
 
     "sencha": {
         /**
@@ -17,7 +17,7 @@
           * As a general rule, all classes that belong to this package should be under this namespace
           * if multiple namespaces are part of this package, set this to "".
           */
-         "namespace": "App.view.home",
+         "namespace": "App.view.widgets",
 
         /**
          * The package type.
@@ -115,15 +115,15 @@
         "sass" : {
             /**
              * The namespace to which this package's SASS corresponds. The default value of
-             * "Home" means that the files in ./sass/src (and ./sass/var) match classes in
-             * the Home" root namespace. In other words, "Home.panel.Panel" maps to
+             * "Coworkee.widgets" means that the files in ./sass/src (and ./sass/var) match classes in
+             * the Coworkee.widgets" root namespace. In other words, "Coworkee.widgets.panel.Panel" maps to
              * ./sass/src/panel/Panel.scss.
              *
              * To style classes from any namespace, set this to blank. If this is blank,
-             * then to style "Home.panel.Panel" you would put SASS in
-             * ./sass/src/Home/panel/Panel.scss.
+             * then to style "Coworkee.widgets.panel.Panel" you would put SASS in
+             * ./sass/src/Coworkee.widgets/panel/Panel.scss.
              */
-            "namespace": "App.view.home",
+            "namespace": "App.view.widgets",
 
             /**
              * Comma-separated list of files or folders containing extra Sass. These
