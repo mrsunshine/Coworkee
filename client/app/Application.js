@@ -10,10 +10,6 @@ Ext.define('App.Application', {
         'Ext.MessageBox'
     ],
 
-    profiles: [
-        'Phone',
-        'Tablet'
-    ],
 
     controllers: [
         'Action'    // creates one global instance of the Action controller
