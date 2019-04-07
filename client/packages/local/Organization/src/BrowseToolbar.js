@@ -1,18 +1,18 @@
-Ext.define('App.view.tablet.office.BrowseToolbar', {
+Ext.define('App.view.organization.BrowseToolbar', {
     extend: 'App.view.widgets.BrowseToolbar',
-    // xtype: 'officebrowsetoolbar', -- set by profile
+    xtype: 'organizationbrowsetoolbar', //-- set by profile
 
     items: {
-        countries: {
+        managers: {
             xtype: 'combobox',
             valueField: 'value',
             displayField: 'label',
-            placeholder: 'All Country',
+            placeholder: 'All Managers',
             queryMode: 'local',
             weight: 10,
             bind: {
-                selection: '{filters.country}',
-                store: '{countries}'
+                selection: '{filters.manager}',
+                store: '{managers}'
             }
         },
         create: {

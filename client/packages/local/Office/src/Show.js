@@ -22,14 +22,14 @@ Ext.define('App.view.office.Show', {
             }
         },
 
-        map: {
-            xtype: 'mapview',
-            userCls: 'office-map',
-            weight: -5,
-            bind: {
-                markers: '{markers}'
-            }
-        },
+        // map: {
+        //     xtype: 'mapview',
+        //     userCls: 'office-map',
+        //     weight: -5,
+        //     bind: {
+        //         markers: '{markers}'
+        //     }
+        // },
 
         content: {
             items: {

@@ -1,5 +1,6 @@
 Ext.define('App.view.widgets.MapView', {
-    extend: 'Ext.ux.google.Map',
+  //  extend: 'Ext.ux.google.Map',
+    extend: 'Ext.panel.Panel',
     xtype: 'mapview',
 
     cls: 'mapview',

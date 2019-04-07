@@ -30,10 +30,12 @@ Ext.define('App.view.person.ShowOffice', {
         }],
     },
 
-    items: [{
-        xtype: 'mapview',
-        bind: {
-            markers: '{record.office}'
-        }
-    }]
+    items: [
+    //     {
+    //     xtype: 'mapview',
+    //     bind: {
+    //         markers: '{record.office}'
+    //     }
+    // }
+    ]
 });

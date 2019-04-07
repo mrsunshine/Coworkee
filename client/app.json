@@ -63,16 +63,18 @@
     "requires": [
         "font-awesome",
         "google",
+        "ux",
         "package-loader",
         "coworkee-widgets",
         "Auth",
-        "History",
+        "Organization",
+        "Person",
         "Home",
         "Office",
-        "Organization",
-        "Person"
+        "History"
     ],
-    "uses": [],
+    "uses": [
+    ],
 
     "mashup": {
         "map": {
