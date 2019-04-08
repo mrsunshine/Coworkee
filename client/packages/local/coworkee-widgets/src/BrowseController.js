@@ -65,7 +65,7 @@ Ext.define('App.view.widgets.BrowseController', {
             regex = /([^\/]+)\/([^\/]+)/g,
             fields = me.getView().getFields() || {},
             filters = {},
-            field, value;
+            field, value, match;
 
         Ext.Object.each(fields, function(key, value) {
             filters[key] = value.defaultValue || null

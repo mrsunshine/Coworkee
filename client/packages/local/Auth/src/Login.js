@@ -1,5 +1,5 @@
 Ext.define('App.view.auth.Login', {
-    extend: 'Ext.Container',
+    extend: 'Ext.container.Container',
     xtype: 'authlogin',
 
     controller: 'authlogin',

@@ -64,16 +64,15 @@
         "font-awesome",
         "google",
         "ux",
-        "package-loader",
         "coworkee-widgets",
-        "Auth",
+        "Auth"
+    ],
+    "uses": [
         "Organization",
         "Person",
         "Home",
         "Office",
         "History"
-    ],
-    "uses": [
     ],
 
     "mashup": {

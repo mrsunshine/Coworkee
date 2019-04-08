@@ -13,7 +13,10 @@ Ext.define('App.view.viewport.ViewportController', {
     },
 
     routes: {
-        'login': 'handleLoginRoute'
+        'login': {
+            before: 'onBeforeHandleLoginRoute',
+            action: 'handleLoginRoute'
+        }
     },
 
     onLaunch: function() {
@@ -48,13 +51,18 @@ Ext.define('App.view.viewport.ViewportController', {
 
     // ROUTING
 
-    handleLoginRoute: function() {
-        var session = this.session;
+    onBeforeHandleLoginRoute: function(action) {
+        let session = this.session;
+
         if (session && session.isValid()) {
             this.redirectTo('', {replace: true});
-            return;
+            action.stop();
+        } else {
+            action.resume();
         }
+    },
 
+    handleLoginRoute: function() {
         this.showAuth();
     },
 

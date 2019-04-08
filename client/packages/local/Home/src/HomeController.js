@@ -4,10 +4,12 @@ Ext.define('App.view.home.HomeController', {
 
     control: {
         '#': {
-            routechange: 'onRouteChange',
             reset: 'refresh'
         }
     },
+	routes: {
+    	'range/:range': 'handleRangeRoute'
+	},
 
     init: function() {
         this.callParent(arguments);
@@ -83,14 +85,16 @@ Ext.define('App.view.home.HomeController', {
         store.clearFilter(true);
         store.filter(filters, false, false);
         store.sort('date', direction);
+        this.redirectTo('home|range/' + range);
     },
 
-    onRouteChange: function(view, route) {
-        var matches = (route || '').match(/(recent|upcoming|past)/g);
-        if (matches) {
-            this.getViewModel().set('range', matches[0]);
-        }
-    },
+	handleRangeRoute: function(range) {
+		let matches = (range || '').match(/(recent|upcoming|past)/g);
+
+    	if (matches) {
+			this.getViewModel().set('range', matches[0]);
+		}
+	},
 
     onEventChildTap: function(view, location) {
         var record = location.record;
