@@ -1,5 +1,5 @@
-# Ext JS Employee Directory
-Ext JS Sample Application - Employee Directory (Coworkee)
+# Ext JS Employee Directory (Coworkee)
+Ext JS Sample Application - including dynamic package loading and routing
 
 ## Getting started
 ### Prerequisite
