@@ -14,6 +14,7 @@ Ext.define('App.view.main.MainController', {
 			}
 		},
 		':type/:id(/:args)?': {
+			before: 'loadPackage',
 			action: 'handleDataRoute',
 			conditions: {
 				':type': '(office|organization|person)',
@@ -119,6 +120,44 @@ Ext.define('App.view.main.MainController', {
 			});
 		}
 
+	},
+
+	loadPackage: function(type, id, arg1, arg2) {
+		const me = this;
+		const action = arg2 ? arg2 : arg1;
+		let packageName;
+
+		switch (type) {
+			case 'people':
+			case 'person':
+				packageName = 'Person';
+				break;
+			case 'organizations':
+			case 'organization':
+				packageName = 'Organization';
+				break;
+			case 'offices':
+			case 'office':
+				packageName = 'Office';
+				break;
+		}
+
+		if (Ext.Package.isLoaded(packageName))
+		{
+			action.resume();
+		}
+		else
+		{
+			this.getView().setMasked({
+				message: 'Loading Package...'
+			});
+
+			Ext.Package.load(packageName).then(function ()
+			{
+				me.getView().setMasked(null);
+				action.resume();
+			});
+		}
 	},
 
 	handleDataRoute: function (type, id, args)
