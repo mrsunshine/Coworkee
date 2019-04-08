@@ -1,191 +1,240 @@
 Ext.define('App.view.viewport.ViewportController', {
-    extend: 'Ext.app.ViewController',
-    alias: 'controller.viewport',
+	extend: 'Ext.app.ViewController',
+	alias: 'controller.viewport',
 
-    listen: {
-        controller: {
-            '*': {
-                login: 'onLogin',
-                logout: 'onLogout',
-                unmatchedroute: 'handleUnmatchedRoute'
-            }
-        }
-    },
+	listen: {
+		controller: {
+			'*': {
+				login: 'onLogin',
+				logout: 'onLogout',
+				unmatchedroute: 'handleUnmatchedRoute'
+			}
+		}
+	},
 
-    routes: {
-        'login': 'handleLoginRoute'
-    },
+	routes: {
+		'*': 'handleWildCardRoute',
+		'login': {
+			before: 'onBeforeHandleLoginRoute',
+			action: 'handleLoginRoute'
+		}
+	},
 
-    onLaunch: function() {
-        this.originalRoute = App.getApplication().getDefaultToken();
-        this.initDirect();
-        this.restoreSession();
-    },
+	onLaunch: function ()
+	{
+		this.originalRoute = App.getApplication().getDefaultToken();
+		this.initDirect();
+		this.restoreSession();
+	},
 
-    showView: function(xtype) {
-        var view = this.lookup(xtype),
-            viewport = this.getView();
+	showView: function (xtype)
+	{
+		console.log("showView", xtype);
+		var view = this.lookup(xtype),
+			viewport = this.getView();
 
-        if (!view) {
-            viewport.removeAll(true);
-            view = viewport.add({
-                xtype: xtype,
-                reference: xtype
-            });
-        }
+		if (!view)
+		{
+			viewport.removeAll(true);
+			view = viewport.add({
+				xtype: xtype,
+				reference: xtype
+			});
+		}
 
-        viewport.setActiveItem(view);
-    },
+		viewport.setActiveItem(view);
+	},
 
-    showAuth: function() {
-        this.showView('authlogin');
-    },
+	showAuth: function ()
+	{
+		this.showView('authlogin');
+	},
 
-    showMain: function() {
-        this.showView('main');
-    },
+	showMain: function ()
+	{
+		this.showView('main');
+	},
 
-    // ROUTING
+	// ROUTING
+	handleWildCardRoute: function ()
+	{
+		document.title = 'Coworkee | ' + Ext.History.getToken();
+	},
 
-    handleLoginRoute: function() {
-        var session = this.session;
-        if (session && session.isValid()) {
-            this.redirectTo('', {replace: true});
-            return;
-        }
+	onBeforeHandleLoginRoute: function (action)
+	{
+		let session = this.session;
 
-        this.showAuth();
-    },
+		if (session && session.isValid())
+		{
+			this.redirectTo('', {replace: true});
+			action.stop();
+		}
+		else
+		{
+			action.resume();
+		}
+	},
 
-    handleUnmatchedRoute: function(route) {
-        var me = this;
+	handleLoginRoute: function ()
+	{
+		this.showAuth();
+	},
 
-        if (!me.session || !me.session.isValid()) {
-            // There is no authenticated user, let's redirect to the login page but keep track
-            // of the original route to restore the requested route after user authentication.
-            me.originalRoute = route;
-            me.redirectTo('login', {replace: true});
-            return;
-        }
+	handleUnmatchedRoute: function (route)
+	{
+		var me = this;
 
-        // There is an authenticated user, so let's simply redirect to the default token.
-        var target = App.getApplication().getDefaultToken();
-        Ext.log.warn('Route unknown: ', route);
-        if (route !== target) {
-            me.redirectTo(target, {replace: true});
-        }
-    },
+		if (!me.session || !me.session.isValid())
+		{
+			// There is no authenticated user, let's redirect to the login page but keep track
+			// of the original route to restore the requested route after user authentication.
+			me.originalRoute = route;
+			me.redirectTo('login', {replace: true});
+			return;
+		}
 
-    // EXT DIRECT
+		// There is an authenticated user, so let's simply redirect to the default token.
+		var target = App.getApplication().getDefaultToken();
+		Ext.log.warn('Route unknown: ', route);
+		if (route !== target)
+		{
+			me.redirectTo(target, {replace: true});
+		}
+	},
 
-    initDirect: function() {
-        var api = Server.API;
-        if (!api) {
-            Ext.raise('Failed to load Direct API');
-        }
+	// EXT DIRECT
 
-        Ext.direct.Manager.addProvider(Ext.applyIf({
-            id: 'server',
-            listeners: {
-                data: 'onDirectData',
-                scope: this
-            }
-        }, api));
-    },
+	initDirect: function ()
+	{
+		var api = Server.API;
+		if (!api)
+		{
+			Ext.raise('Failed to load Direct API');
+		}
 
-    setDirectToken: function(token) {
-        // https://jwt.io/introduction/#how-do-json-web-tokens-work-
-        var provider = Ext.direct.Manager.getProvider('server'),
-            headers = provider.getHeaders() || {};
+		Ext.direct.Manager.addProvider(Ext.applyIf({
+			id: 'server',
+			listeners: {
+				data: 'onDirectData',
+				scope: this
+			}
+		}, api));
+	},
 
-        if (token) {
-            headers['Authorization'] = 'Bearer ' + token;
-        } else {
-            delete headers['Authorization'];
-        }
+	setDirectToken: function (token)
+	{
+		// https://jwt.io/introduction/#how-do-json-web-tokens-work-
+		var provider = Ext.direct.Manager.getProvider('server'),
+			headers = provider.getHeaders() || {};
 
-        provider.setHeaders(headers);
-    },
+		if (token)
+		{
+			headers['Authorization'] = 'Bearer ' + token;
+		}
+		else
+		{
+			delete headers['Authorization'];
+		}
 
-    onDirectData: function(provider, e) {
-        if (e.type !== 'exception') {
-            return;
-        }
+		provider.setHeaders(headers);
+	},
 
-        var message = e.message || {};
-        switch (message.code) {
-        case -32098:    // AuthTokenExpired
-        case -32097:    // AuthTokenInvalid
-            // Defer user deauthentication until the current direct transaction is done.
-            Ext.asap(this.terminateSession, this);
-            break;
-        default:
-            break;
-        }
-    },
+	onDirectData: function (provider, e)
+	{
+		if (e.type !== 'exception')
+		{
+			return;
+		}
 
-    // SESSION MANAGEMENT
+		var message = e.message || {};
+		switch (message.code)
+		{
+			case -32098:    // AuthTokenExpired
+			case -32097:    // AuthTokenInvalid
+				// Defer user deauthentication until the current direct transaction is done.
+				Ext.asap(this.terminateSession, this);
+				break;
+			default:
+				break;
+		}
+	},
 
-    restoreSession: function() {
-        var data = App.util.State.get('session'),
-            session = data? App.model.Session.loadData(data) : null;
+	// SESSION MANAGEMENT
 
-        if (session && session.isValid()) {
-            this.initiateSession(session);
-        } else {
-            this.terminateSession();
-        }
+	restoreSession: function ()
+	{
+		var data = App.util.State.get('session'),
+			session = data ? App.model.Session.loadData(data) : null;
 
-        return session;
-    },
+		if (session && session.isValid())
+		{
+			this.initiateSession(session);
+		}
+		else
+		{
+			this.terminateSession();
+		}
 
-    initiateSession: function(session) {
-        this.setDirectToken(session.get('token'));
-        this.saveSession(session);
-        this.showMain();
-    },
+		return session;
+	},
 
-    terminateSession: function() {
-        this.setDirectToken(null);
-        this.saveSession(null);
-        this.showAuth();
-    },
+	initiateSession: function (session)
+	{
+		this.setDirectToken(session.get('token'));
+		this.saveSession(session);
+		this.showMain();
+	},
 
-    saveSession: function(session) {
-        App.util.State.set('session', session && session.getData(true));
-        this.getViewModel().set('user', session && session.getUser());
-        this.session = session;
-    },
+	terminateSession: function ()
+	{
+		this.setDirectToken(null);
+		this.saveSession(null);
+		this.showAuth();
+	},
 
-    // AUTHENTICATION
+	saveSession: function (session)
+	{
+		App.util.State.set('session', session && session.getData(true));
+		this.getViewModel().set('user', session && session.getUser());
+		this.session = session;
+	},
 
-    onLogin: function(session) {
-        if (!session || !session.isValid()) {
-            return false;
-        }
+	// AUTHENTICATION
 
-        this.initiateSession(session);
-        this.redirectTo(this.originalRoute, {replace: true});
-    },
+	onLogin: function (session)
+	{
+		if (!session || !session.isValid())
+		{
+			return false;
+		}
 
-    onLogout: function() {
-        var me = this,
-            view = me.getView(),
-            session = me.session;
+		this.initiateSession(session);
+		this.redirectTo(this.originalRoute, {replace: true});
+	},
 
-        if (!session || !session.isValid()) {
-            return false;
-        }
+	onLogout: function ()
+	{
+		var me = this,
+			view = me.getView(),
+			session = me.session;
 
-        view.setMasked({ xtype: 'loadmask' });
-        session.logout().catch(function() {
-            // TODO handle errors
-        }).then(function() {
-            me.originalRoute = Ext.History.getToken();
-            me.terminateSession();
-            view.setMasked(false);
-            me.redirectTo('login', {replace: true});
-        });
-    }
+		if (!session || !session.isValid())
+		{
+			return false;
+		}
+
+		view.setMasked({xtype: 'loadmask'});
+		session.logout().catch(function ()
+		{
+			// TODO handle errors
+		}).then(function ()
+		{
+			me.originalRoute = Ext.History.getToken();
+			me.terminateSession();
+			view.setMasked(false);
+			me.redirectTo('login', {replace: true});
+		});
+	}
 });
 

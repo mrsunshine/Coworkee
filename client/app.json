@@ -62,7 +62,17 @@
      */
     "requires": [
         "font-awesome",
-        "google"
+        "google",
+        "ux",
+        "coworkee-widgets",
+        "Auth"
+    ],
+    "uses": [
+        "Organization",
+        "Person",
+        "Home",
+        "Office",
+        "History"
     ],
 
     "mashup": {
