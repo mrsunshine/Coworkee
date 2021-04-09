@@ -1,10 +1,6 @@
 # Ext JS Employee Directory (Coworkee)
 Ext JS Sample Application - including dynamic package loading and routing
 
-## Presentation:  Dynamic package loading and routing with Ext JS
-
-Slides:  https://sencha-community-days.de/wp-content/uploads/2019/04/presentations/SCD_2019-Packages-and-Routing.zip
-
 ## Getting started
 ### Prerequisite
 - Install [Node.js](https://nodejs.org/) (^6.9.2)
